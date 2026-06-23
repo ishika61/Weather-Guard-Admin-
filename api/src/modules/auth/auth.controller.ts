@@ -45,7 +45,10 @@ export class AuthController {
       process.env.FRONTEND_URL ?? process.env.CLIENT_URL ?? 'http://localhost:5173';
     const callbackUrl = new URL('/auth/callback', frontendUrl);
 
-    callbackUrl.searchParams.set('accessToken', auth.accessToken);
+    callbackUrl.searchParams.set(
+      'auth',
+      Buffer.from(JSON.stringify(auth)).toString('base64'),
+    );
 
     return res.redirect(callbackUrl.toString());
   }

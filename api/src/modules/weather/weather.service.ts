@@ -26,7 +26,12 @@ export class WeatherService {
     const message = this.createSimulatedAlert();
 
     for (const user of approvedUsers) {
-      await this.telegramService.sendWeatherAlert(user, message);
+      const result = await this.telegramService.sendWeatherAlert(user, message);
+
+      if (result?.skipped || result?.ok === false) {
+        continue;
+      }
+
       await this.weatherAlertModel.create({
         userId: new Types.ObjectId(String(user._id)),
         message,

@@ -13,7 +13,12 @@ export class UsersService {
   }
 
   findApprovedUsers() {
-    return this.userModel.find({ isApproved: true }).exec();
+    return this.userModel
+      .find({
+        isApproved: true,
+        telegramChatId: { $exists: true, $nin: [null, ''] },
+      })
+      .exec();
   }
 
   findById(id: string) {
@@ -39,10 +44,14 @@ export class UsersService {
     const existingUser = await this.findByEmail(payload.email);
 
     if (existingUser) {
+      existingUser.name = payload.name;
+      existingUser.provider = payload.provider;
+
       if (existingUser.role !== role) {
         existingUser.role = role;
-        await existingUser.save();
       }
+
+      await existingUser.save();
 
       return existingUser;
     }

@@ -8,8 +8,10 @@ import { AuthService } from '../auth.service';
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
   constructor(
+
     private readonly authService: AuthService,
-    configService: ConfigService,
+    configService: ConfigS
+    ervice,
   ) {
     super({
       clientID: configService.get<string>('GITHUB_CLIENT_ID') ?? '',

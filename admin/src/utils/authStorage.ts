@@ -2,6 +2,7 @@ import type { AuthResponse, AuthUser } from '../types/api'
 
 const tokenKey = 'weatherguard_token'
 const userKey = 'weatherguard_user'
+const authChangeEvent = 'weatherguard_auth_changed'
 
 type JwtPayload = {
   sub?: string
@@ -12,6 +13,7 @@ type JwtPayload = {
 export function saveAuth(auth: AuthResponse) {
   localStorage.setItem(tokenKey, normalizeToken(auth.accessToken))
   localStorage.setItem(userKey, JSON.stringify(auth.user))
+  notifyAuthChanged()
 }
 
 export function saveToken(rawToken: string) {
@@ -38,6 +40,7 @@ export function saveToken(rawToken: string) {
   }
 
   localStorage.setItem(userKey, JSON.stringify(user))
+  notifyAuthChanged()
 
   return true
 }
@@ -64,6 +67,23 @@ export function getStoredUser(): AuthUser | null {
 export function clearAuth() {
   localStorage.removeItem(tokenKey)
   localStorage.removeItem(userKey)
+  notifyAuthChanged()
+}
+
+export function subscribeToAuthChanges(callback: () => void) {
+  function handleStorage(event: StorageEvent) {
+    if (event.key === tokenKey || event.key === userKey) {
+      callback()
+    }
+  }
+
+  window.addEventListener(authChangeEvent, callback)
+  window.addEventListener('storage', handleStorage)
+
+  return () => {
+    window.removeEventListener(authChangeEvent, callback)
+    window.removeEventListener('storage', handleStorage)
+  }
 }
 
 function parseJwt(token: string): JwtPayload | null {
@@ -107,4 +127,8 @@ function decodeBase64Url(value: string) {
   const padded = base64.padEnd(base64.length + ((4 - (base64.length % 4)) % 4), '=')
 
   return atob(padded)
+}
+
+function notifyAuthChanged() {
+  window.dispatchEvent(new Event(authChangeEvent))
 }

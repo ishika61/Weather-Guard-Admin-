@@ -1,36 +1,52 @@
-import { useState } from 'react'
-import type { FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
+
 import { authService } from '../services/authService'
-import { saveToken } from '../utils/authStorage'
 
 export function LoginPage() {
-  const [token, setToken] = useState('')
-  const navigate = useNavigate()
-
-  function handleTokenSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-
-    if (!token.trim()) {
-      return
-    }
-
-    if (saveToken(token.trim())) {
-      navigate('/dashboard')
-    }
-  }
-
   return (
     <div className="mx-auto flex min-h-[calc(100vh-96px)] max-w-md flex-col justify-center">
-      <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-        <div className="mb-6">
-          <p className="text-sm font-semibold uppercase text-teal-700">
-            WeatherGuard Admin
-          </p>
-          <h1 className="mt-2 text-3xl font-bold text-slate-950">
+      {/* Glow effect behind card */}
+      <div
+        style={{
+          position: 'absolute',
+          width: 400,
+          height: 400,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%)',
+          pointerEvents: 'none',
+          transform: 'translate(-50%, -50%)',
+          left: '50%',
+          top: '50%',
+          zIndex: 0,
+        }}
+      />
+
+      <div
+        className="relative rounded-2xl p-8"
+        style={{
+          background: 'rgba(13, 20, 36, 0.9)',
+          border: '1px solid rgba(99, 102, 241, 0.2)',
+          boxShadow: '0 0 0 1px rgba(99,102,241,0.05), 0 24px 64px rgba(0,0,0,0.5)',
+          zIndex: 1,
+        }}
+      >
+        <div className="mb-8">
+          <div
+            className="mb-4 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-widest"
+            style={{
+              background: 'rgba(99, 102, 241, 0.15)',
+              color: '#a5b4fc',
+              border: '1px solid rgba(99,102,241,0.25)',
+            }}
+          >
+            WeatherGuard
+          </div>
+          <h1
+            className="text-3xl font-bold"
+            style={{ color: '#f1f5f9', letterSpacing: '-0.03em', lineHeight: 1.2 }}
+          >
             Secure weather alerts
           </h1>
-          <p className="mt-2 text-sm text-slate-600">
+          <p className="mt-3 text-sm" style={{ color: '#64748b' }}>
             Sign in with a social account to request access or manage users.
           </p>
         </div>
@@ -38,39 +54,52 @@ export function LoginPage() {
         <div className="grid gap-3">
           <a
             href={authService.googleLoginUrl}
-            className="rounded-md border border-slate-300 px-4 py-3 text-center font-medium text-slate-800 hover:bg-slate-50"
+            className="flex items-center justify-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all"
+            style={{
+              border: '1px solid rgba(148, 163, 184, 0.15)',
+              color: '#e2e8f0',
+              background: 'rgba(255,255,255,0.04)',
+            }}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.08)'
+              ;(e.currentTarget as HTMLElement).style.borderColor = 'rgba(148,163,184,0.3)'
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.04)'
+              ;(e.currentTarget as HTMLElement).style.borderColor = 'rgba(148,163,184,0.15)'
+            }}
           >
-            Login with Google
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+            </svg>
+            Continue with Google
           </a>
           <a
             href={authService.githubLoginUrl}
-            className="rounded-md bg-slate-950 px-4 py-3 text-center font-medium text-white hover:bg-slate-800"
+            className="flex items-center justify-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all"
+            style={{
+              background: 'linear-gradient(135deg, #6366f1, #7c3aed)',
+              color: '#fff',
+              border: '1px solid rgba(99,102,241,0.5)',
+              boxShadow: '0 0 20px rgba(99,102,241,0.25)',
+            }}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLElement).style.boxShadow = '0 0 28px rgba(99,102,241,0.4)'
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLElement).style.boxShadow = '0 0 20px rgba(99,102,241,0.25)'
+            }}
           >
-            Login with GitHub
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+            </svg>
+            Continue with GitHub
           </a>
         </div>
 
-        <form onSubmit={handleTokenSubmit} className="mt-6 border-t pt-6">
-          <label
-            htmlFor="token"
-            className="block text-sm font-medium text-slate-700"
-          >
-            Access token
-          </label>
-          <input
-            id="token"
-            value={token}
-            onChange={(event) => setToken(event.target.value)}
-            placeholder="Paste JWT after OAuth callback"
-            className="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none focus:border-teal-700 focus:ring-2 focus:ring-teal-100"
-          />
-          <button
-            type="submit"
-            className="mt-3 w-full rounded-md bg-teal-700 px-4 py-2 font-medium text-white hover:bg-teal-800"
-          >
-            Continue
-          </button>
-        </form>
       </div>
     </div>
   )

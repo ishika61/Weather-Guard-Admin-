@@ -1,17 +1,32 @@
-import { useMemo } from 'react'
-import { clearAuth, getStoredUser, getToken } from '../utils/authStorage'
+import { useEffect, useState } from 'react'
+import {
+  clearAuth,
+  getStoredUser,
+  getToken,
+  subscribeToAuthChanges,
+} from '../utils/authStorage'
+
+function readAuthState() {
+  const token = getToken()
+  const user = getStoredUser()
+
+  return {
+    token,
+    user,
+    isAuthenticated: Boolean(token),
+    isAdmin: user?.role === 'admin',
+  }
+}
 
 export function useAuth() {
-  return useMemo(() => {
-    const token = getToken()
-    const user = getStoredUser()
+  const [authState, setAuthState] = useState(readAuthState)
 
-    return {
-      token,
-      user,
-      isAuthenticated: Boolean(token),
-      isAdmin: user?.role === 'admin',
-      logout: clearAuth,
-    }
+  useEffect(() => {
+    return subscribeToAuthChanges(() => setAuthState(readAuthState()))
   }, [])
+
+  return {
+    ...authState,
+    logout: clearAuth,
+  }
 }
