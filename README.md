@@ -345,7 +345,7 @@ http://localhost:3000
 
 # Demo Video Checklist
 
-The demo video should show:
+https://www.loom.com/share/f9caf29f885d41c6b460c41038e7af94?t=89
 
 1. Google or GitHub login
 2. Request Access workflow
