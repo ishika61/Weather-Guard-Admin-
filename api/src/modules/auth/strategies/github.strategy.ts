@@ -10,8 +10,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
   constructor(
 
     private readonly authService: AuthService,
-    configService: ConfigS
-    ervice,
+    configService: ConfigService,
   ) {
     super({
       clientID: configService.get<string>('GITHUB_CLIENT_ID') ?? '',
