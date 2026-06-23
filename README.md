@@ -299,12 +299,20 @@ Frontend runs at:
 http://localhost:5173
 ```
 
-Backend runs at:
 
-```text
+
+## backend Setup
+
+```bash
+cd api
+npm install
+```
+Start Development Server
+```
+npm run start:dev
+The API server will run on:
 http://localhost:3000
 ```
-
 ---
 
 # Testing Checklist
